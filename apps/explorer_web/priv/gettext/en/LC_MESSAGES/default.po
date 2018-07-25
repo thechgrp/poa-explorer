@@ -484,6 +484,7 @@ msgstr ""
 #: lib/explorer_web/templates/block/index.html.eex:67
 #: lib/explorer_web/templates/block_transaction/index.html.eex:51
 #: lib/explorer_web/templates/pending_transaction/index.html.eex:79
+#: lib/explorer_web/templates/token/show.html.eex:129
 #: lib/explorer_web/templates/transaction/index.html.eex:84
 msgid "Older"
 msgstr ""
@@ -643,6 +644,7 @@ msgstr ""
 #: lib/explorer_web/templates/address_transaction/_transaction.html.eex:111
 #: lib/explorer_web/templates/block_transaction/_transaction.html.eex:25
 #: lib/explorer_web/templates/chain/_transactions.html.eex:25
+#: lib/explorer_web/templates/token/show.html.eex:107
 #: lib/explorer_web/templates/transaction/index.html.eex:69
 msgid "Block #%{number}"
 msgstr ""
@@ -727,12 +729,14 @@ msgid "Used"
 msgstr ""
 
 #, elixir-format
+#: lib/explorer_web/templates/token/show.html.eex:74
 #: lib/explorer_web/views/transaction_view.ex:116
 msgid "Token Transfer"
 msgstr ""
 
 #, elixir-format
 #: lib/explorer_web/templates/address_transaction/_transaction.html.eex:69
+#: lib/explorer_web/templates/token/show.html.eex:13
 msgid "Transfers"
 msgstr ""
 
@@ -742,3 +746,36 @@ msgid "%{count} transaction"
 msgid_plural "%{count} transactions"
 msgstr[0] ""
 msgstr[1] ""
+
+#, elixir-format
+#: lib/explorer_web/templates/token/show.html.eex:122
+msgid "There are no transfers for this Token."
+msgstr ""
+
+#, elixir-format
+#: lib/explorer_web/templates/token/show.html.eex:7
+msgid "Token Details"
+msgstr ""
+
+#, elixir-format
+#: lib/explorer_web/templates/token/show.html.eex:44
+#: lib/explorer_web/templates/token/show.html.eex:54
+#: lib/explorer_web/templates/token/show.html.eex:57
+#: lib/explorer_web/templates/token/show.html.eex:67
+msgid "Token Transfers"
+msgstr ""
+
+#, elixir-format
+#: lib/explorer_web/templates/token/show.html.eex:12
+msgid "addresses"
+msgstr ""
+
+#, elixir-format
+#: lib/explorer_web/templates/token/show.html.eex:14
+msgid "decimals"
+msgstr ""
+
+#, elixir-format
+#: lib/explorer_web/templates/token/show.html.eex:23
+msgid "Total Suply"
+msgstr ""
