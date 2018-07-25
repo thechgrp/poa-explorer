@@ -2,11 +2,16 @@ defmodule Explorer.Repo.Migrations.CreateTokens do
   use Ecto.Migration
 
   def change do
-    create table(:tokens) do
-      add(:name, :string)
-      add(:symbol, :string)
-      add(:total_supply, :decimal)
-      add(:decimals, :smallint)
+    create table(:tokens, primary_key: false) do
+      # ID, name, symbol, total supply, and decimals may not always be available from executing a token contract
+      # Allow for nulls for those fields
+      add(:name, :string, null: true)
+      add(:symbol, :string, null: true)
+      add(:total_supply, :decimal, null: true)
+      add(:decimals, :smallint, null: true)
+      add(:type, :string, null: false)
+      add(:cataloged, :boolean, default: false)
+      add(:id, :integer, null: true)
 
       add(
         :contract_address_hash,
