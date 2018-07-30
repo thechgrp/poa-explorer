@@ -29,27 +29,4 @@ defmodule ExplorerWeb.AddressTransactionView do
   def transfered_value?(%Explorer.Chain.Wei{value: value}) do
     Decimal.to_integer(value) != 0
   end
-
-  @doc """
-  Formats the given amount according to given decimals.
-
-  ## Examples
-
-  iex> ExplorerWeb.AddressTransactionView.formatted_token_amount(Decimal.new(20500000), 5)
-  "205"
-
-  iex> ExplorerWeb.AddressTransactionView.formatted_token_amount(Decimal.new(20500000), 7)
-  "2.05"
-
-  iex> ExplorerWeb.AddressTransactionView.formatted_token_amount(Decimal.new(205000), 12)
-  "0.000000205"
-
-  """
-  @spec formatted_token_amount(Decimal.t(), non_neg_integer()) :: String.t()
-  def formatted_token_amount(%Decimal{sign: sign, coef: coef, exp: exp}, decimals) do
-    sign
-    |> Decimal.new(coef, exp - decimals)
-    |> Decimal.reduce()
-    |> Decimal.to_string(:normal)
-  end
 end
