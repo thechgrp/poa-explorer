@@ -1,0 +1,20 @@
+<div class="tile tile-type-token fade-in" data-test="token_transfer" data-token-transfer-id="<%= @token_transfer.id %>">
+  <div class="row justify-content-end">
+    <div class="col-md-3 col-lg-2 d-flex align-items-center justify-content-start justify-content-lg-center tile-label">
+      <%=  gettext("Token Transfer") %>
+    </div>
+    <div class="col-md-9 col-lg-10 d-flex flex-column text-nowrap">
+      <%= render ExplorerWeb.TransactionView, "_link.html", locale: @locale, transaction_hash: @token_transfer.transaction_hash %>
+      <span class="text-nowrap">
+        <%= render ExplorerWeb.AddressView, "_link.html", address_hash: @token_transfer.from_address_hash, contract: ExplorerWeb.AddressView.contract?(@token_transfer.from_address), locale: @locale %>
+        &rarr;
+        <%= render ExplorerWeb.AddressView, "_link.html", address_hash: @token_transfer.to_address_hash, contract: ExplorerWeb.AddressView.contract?(@token_transfer.to_address), locale: @locale %>
+      </span>
+
+      <span class="tile-title text-truncate">
+        <%= format_according_to_decimals(@token_transfer.amount, @token_transfer.token.decimals) %>
+        <%= @token_transfer.token.symbol %>
+      </span>
+    </div>
+  </div>
+</div>

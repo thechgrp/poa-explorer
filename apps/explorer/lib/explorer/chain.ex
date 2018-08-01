@@ -27,9 +27,10 @@ defmodule Explorer.Chain do
     Import,
     InternalTransaction,
     Log,
+    SmartContract,
+    TokenTransfer,
     Transaction,
-    Wei,
-    SmartContract
+    Wei
   }
 
   alias Explorer.Chain.Block.Reward
@@ -1464,6 +1465,40 @@ defmodule Explorer.Chain do
     |> page_logs(paging_options)
     |> limit(^paging_options.page_size)
     |> order_by([log], asc: log.index)
+    |> join_associations(necessity_by_association)
+    |> Repo.all()
+  end
+
+  @doc """
+  Finds all `t:Explorer.Chain.TokenTransfer.t/0`s for `t:Explorer.Chain.Transaction.t/0`.
+
+  ## Options
+
+    * `:necessity_by_association` - use to load `t:association/0` as `:required` or `:optional`.  If an association is
+      `:required`, and the `t:Explorer.Chain.TokenTransfer.t/0` has no associated record for that association, then the
+      `t:Explorer.Chain.TokenTransfer.t/0` will not be included in the page `entries`.
+    * `:paging_options` - a `t:Explorer.PagingOptions.t/0` used to specify the `:page_size` and
+      `:key` (a tuple of the lowest/oldest `{index}`) and. Results will be the transactions older than
+      the `index` that are passed.
+
+  """
+  @spec transaction_to_token_transfers(Transaction.t(), [paging_options | necessity_by_association_option]) :: [
+          TokenTransfer.t()
+        ]
+  def transaction_to_token_transfers(
+        %Transaction{hash: %Hash{byte_count: unquote(Hash.Full.byte_count())} = transaction_hash},
+        options \\ []
+      )
+      when is_list(options) do
+    necessity_by_association = Keyword.get(options, :necessity_by_association, %{})
+    paging_options = Keyword.get(options, :paging_options, @default_paging_options)
+
+    TokenTransfer
+    |> join(:inner, [token_transfer], transaction in assoc(token_transfer, :transaction))
+    |> where([_, transaction], transaction.hash == ^transaction_hash)
+    |> TokenTransfer.page_token_transfer(paging_options)
+    |> limit(^paging_options.page_size)
+    |> order_by([token_transfer], asc: token_transfer.log_index)
     |> join_associations(necessity_by_association)
     |> Repo.all()
   end
