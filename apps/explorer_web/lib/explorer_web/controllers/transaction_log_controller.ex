@@ -14,7 +14,8 @@ defmodule ExplorerWeb.TransactionLogController do
              necessity_by_association: %{
                block: :optional,
                from_address: :required,
-               to_address: :optional
+               to_address: :optional,
+               token_transfers: :optional
              }
            ) do
       full_options =
@@ -36,6 +37,7 @@ defmodule ExplorerWeb.TransactionLogController do
         "index.html",
         logs: logs,
         max_block_number: max_block_number(),
+        show_token_transfers: Enum.count(transaction.token_transfers) > 0,
         next_page_params: next_page_params(next_page, logs, params),
         transaction: transaction,
         exchange_rate: Market.get_exchange_rate(Explorer.coin()) || Token.null()
