@@ -1,19 +1,15 @@
 <div class="tile tile-type-<%= ExplorerWeb.TransactionView.type_suffix(@transaction) %> fade-in  tile-status--<%= ExplorerWeb.TransactionView.status(@transaction) %>" data-transaction-hash="<%= @transaction.hash %>">
   <div class="row">
-    <div class="col-md-2 d-flex flex-column align-items-left justify-content-start justify-content-lg-center">
-      <div class="d-flex flex-md-column ml-md-4">
-        <span class="ml-4">
-          <span class="tile-label">
-            <%= ExplorerWeb.TransactionView.transaction_display_type(@transaction) %>
-          </span>
-
-          <span class="tile-status-label" data-test="transaction_status">
-            <%= ExplorerWeb.TransactionView.formatted_status(@transaction) %>
-          </span>
+    <div class="col-md-2 d-flex flex-row flex-md-column align-items-left justify-content-start justify-content-lg-center mb-1 mb-md-0 pl-md-4">
+      <span class="tile-label">
+        <%= ExplorerWeb.TransactionView.transaction_display_type(@transaction) %>
       </span>
-      </div>
+
+      <span class="tile-status-label ml-2 ml-md-0" data-test="transaction_status">
+        <%= ExplorerWeb.TransactionView.formatted_status(@transaction) %>
+      </span>
     </div>
-    <div class="col-md-7 col-lg-8 pr-0 d-flex flex-column">
+    <div class="col-md-7 col-lg-8 d-flex flex-column pr-2 pr-sm-2 pr-md-0">
       <%= render ExplorerWeb.TransactionView, "_link.html", locale: @locale, transaction_hash: @transaction.hash %>
       <span class="text-nowrap">
         <%= if @address.hash == @transaction.from_address_hash do %>
@@ -30,19 +26,18 @@
           <%= render ExplorerWeb.AddressView, "_link.html", address_hash: ExplorerWeb.TransactionView.to_address_hash(@transaction), contract: ExplorerWeb.AddressView.contract?(@transaction.to_address), locale: @locale %>
         <% end %>
       </span>
-      <span>
-
-        <span class="tile-title mr-1 mr-lg-0">
+      <span class="d-flex flex-md-row flex-column mt-3 mt-md-0">
+        <span class="tile-title">
           <%= ExplorerWeb.TransactionView.value(@transaction, include_label: false) %> <%= gettext "Ether" %>
         </span>
-        <span>
+        <span class="ml-0 ml-md-1 text-nowrap">
           <%= ExplorerWeb.TransactionView.formatted_fee(@transaction, denomination: :ether) %> <%= gettext "Fee" %>
         </span>
 
       </span>
 
     </div>
-    <div class="col-md-3 col-lg-2 d-flex flex-row flex-md-column justify-content-start text-md-right">
+    <div class="col-md-3 col-lg-2 d-flex flex-row flex-md-column justify-content-start text-md-right mt-3 mt-md-0">
       <span>
         <%= if transaction_from_or_to_current_address?(@transaction, @address.hash) do %>
           <%= if @transaction.from_address_hash == @address.hash do %>
@@ -55,14 +50,14 @@
             </span>
           <% end %>
         <% end %>
-        </span>
-        <span data-from-now="<%= @transaction.block.timestamp %>"></span>
-        <span>
-          <%= link(
-            gettext("Block #%{number}", number: to_string(@transaction.block.number)),
-            to: block_path(ExplorerWeb.Endpoint, :show, @locale, @transaction.block)
-          ) %>
-        </span>
+      </span>
+      <span class="ml-2 ml-sm-0">
+        <%= link(
+          gettext("Block #%{number}", number: to_string(@transaction.block.number)),
+          to: block_path(ExplorerWeb.Endpoint, :show, @locale, @transaction.block)
+        ) %>
+      </span>
+      <span class="ml-2 ml-sm-0" data-from-now="<%= @transaction.block.timestamp %>"></span>
     </div>
 
     <%= if ExplorerWeb.TransactionView.involves_token_transfers?(@transaction) do %>
