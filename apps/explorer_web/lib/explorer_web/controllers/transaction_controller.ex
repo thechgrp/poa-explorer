@@ -33,7 +33,21 @@ defmodule ExplorerWeb.TransactionController do
     )
   end
 
+  # Redirects to Token Transfers controller if the transaction has tokens transferred. Otherwise, redirects to Internal Transactions controller.
   def show(conn, %{"id" => id, "locale" => locale}) do
-    redirect(conn, to: transaction_internal_transaction_path(conn, :index, locale, id))
+    with {:ok, transaction_hash} <- Chain.string_to_transaction_hash(id),
+         {:ok, transaction} <-
+           Chain.hash_to_transaction(transaction_hash, necessity_by_association: %{token_transfers: :optional}) do
+      case Enum.count(transaction.token_transfers) do
+        0 -> redirect(conn, to: transaction_internal_transaction_path(conn, :index, locale, id))
+        _ -> redirect(conn, to: transaction_token_transfer_path(conn, :index, locale, id))
+      end
+    else
+      :error ->
+        not_found(conn)
+
+      {:error, :not_found} ->
+        not_found(conn)
+    end
   end
 end
