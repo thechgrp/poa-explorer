@@ -14,22 +14,6 @@ defmodule ExplorerWeb.AddressTransactionView do
     end
   end
 
-  def address_sending_and_receiving_tokens?(%Transaction{} = transaction, address_hash) do
-    address_receiving_tokens?(transaction, address_hash) && address_sending_tokens?(transaction, address_hash)
-  end
-
-  def address_receiving_tokens?(%Transaction{token_transfers: token_transfers}, address_hash) do
-    Enum.any?(token_transfers, &(&1.to_address_hash == address_hash))
-  end
-
-  def address_sending_tokens?(%Transaction{token_transfers: token_transfers}, address_hash) do
-    Enum.any?(token_transfers, &(&1.from_address_hash == address_hash))
-  end
-
-  def transfered_value?(%Explorer.Chain.Wei{value: value}) do
-    Decimal.to_integer(value) != 0
-  end
-
   @doc """
   Formats the given amount according to given decimals.
 
@@ -51,5 +35,14 @@ defmodule ExplorerWeb.AddressTransactionView do
     |> Decimal.new(coef, exp - decimals)
     |> Decimal.reduce()
     |> Decimal.to_string(:normal)
+  end
+
+  def should_show_transaction_transfer?(%Transaction{} = transaction, address_hash) do
+    transaction_from_or_to_current_address?(transaction, address_hash) ||
+      Decimal.to_integer(transaction.value.value) != 0 || Enum.empty?(transaction.token_transfers)
+  end
+
+  def transaction_from_or_to_current_address?(%Transaction{} = transaction, address_hash) do
+    transaction.from_address_hash == address_hash || transaction.to_address_hash == address_hash
   end
 end

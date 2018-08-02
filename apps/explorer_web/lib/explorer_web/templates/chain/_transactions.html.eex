@@ -28,13 +28,13 @@
           </span>
         </div>
         <div class="col-md-3 col-lg-2 d-flex flex-row flex-md-column justify-content-start text-md-right mt-3 mt-md-0">
-          <span>
+          <span class="mr-2 mr-md-0">
             <%= link(
               gettext("Block #%{number}", number: to_string(transaction.block.number)),
               to: block_path(@conn, :show, @conn.assigns.locale, transaction.block)
               ) %>
           </span>
-          <span class="ml-2 ml-sm-0" data-from-now="<%= transaction.block.timestamp %>"></span>
+          <span data-from-now="<%= transaction.block.timestamp %>"></span>
         </div>
       </div>
     </div>
