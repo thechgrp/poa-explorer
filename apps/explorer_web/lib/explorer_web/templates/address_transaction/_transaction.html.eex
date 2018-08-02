@@ -37,9 +37,16 @@
       </span>
 
     </div>
-    <div class="col-md-3 col-lg-2 d-flex flex-row flex-md-column justify-content-start text-md-right mt-3 mt-md-0">
-      <span>
-        <%= if transaction_from_or_to_current_address?(@transaction, @address.hash) do %>
+    <div class="col-md-3 col-lg-2 d-flex flex-row flex-md-column flex-nowrap justify-content-start text-md-right mt-3 mt-md-0">
+      <span class="mr-2 mr-md-0 order-1">
+        <%= link(
+          gettext("Block #%{number}", number: to_string(@transaction.block.number)),
+          to: block_path(ExplorerWeb.Endpoint, :show, @locale, @transaction.block)
+        ) %>
+      </span>
+      <span class="mr-2 mr-md-0 order-2" data-from-now="<%= @transaction.block.timestamp %>"></span>
+      <%= if transaction_from_or_to_current_address?(@transaction, @address.hash) do %>
+        <span class="mr-2 mr-md-0 order-0 order-md-3">
           <%= if @transaction.from_address_hash == @address.hash do %>
             <span data-test="transaction_type" class="badge badge-danger tile-badge">
               <%= gettext "OUT" %>
@@ -49,15 +56,8 @@
               <%= gettext "IN" %>
             </span>
           <% end %>
-        <% end %>
-      </span>
-      <span class="ml-2 ml-sm-0">
-        <%= link(
-          gettext("Block #%{number}", number: to_string(@transaction.block.number)),
-          to: block_path(ExplorerWeb.Endpoint, :show, @locale, @transaction.block)
-        ) %>
-      </span>
-      <span class="ml-2 ml-sm-0" data-from-now="<%= @transaction.block.timestamp %>"></span>
+        </span>
+      <% end %>
     </div>
 
     <%= if ExplorerWeb.TransactionView.involves_token_transfers?(@transaction) do %>
@@ -68,8 +68,8 @@
     <% end %>
 
     <%= for token_transfer <- @transaction.token_transfers do %>
-      <div class="offset-md-2 col-sm-7 col-lg-8 d-flex flex-column">
-        <span data-test="token_transfer">
+      <div class="offset-md-2 col-sm-7 col-lg-8 d-flex flex-column mt-3 mt-md-0">
+        <span class="text-nowrap" data-test="token_transfer">
           <span data-test="token_transfer_address_hash">
             <%= ExplorerWeb.AddressView.display_address_hash(@address, token_transfer.from_address, @locale) %>
           </span>
@@ -78,11 +78,22 @@
             <%= ExplorerWeb.AddressView.display_address_hash(@address, token_transfer.to_address, @locale) %>
           </span>
         </span>
-      </div>
-      <div class="col-sm-3 col-lg-2 d-flex flex-row flex-sm-column align-items-end">
         <span class="tile-title">
           <%= formatted_token_amount(token_transfer.amount, token_transfer.token.decimals) %> <%= token_transfer.token.symbol %>
         </span>
+      </div>
+      <div class="col-sm-3 col-lg-2 d-flex flex-row flex-sm-column align-items-end">
+        <%= if token_transfer.from_address == @address || token_transfer.to_address == @address do %>
+          <%= if token_transfer.from_address == @address do %>
+            <span data-test="transaction_type" class="badge badge-danger tile-badge">
+              <%= gettext "OUT" %>
+            </span>
+          <% else %>
+            <span data-test="transaction_type" class="badge badge-success tile-badge">
+              <%= gettext "IN" %>
+            </span>
+          <% end %>
+        <% end %>
       </div>
     <% end %>
   </div>
