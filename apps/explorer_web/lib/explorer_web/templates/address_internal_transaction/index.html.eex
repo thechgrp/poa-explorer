@@ -126,7 +126,7 @@
             <span><%= gettext "There are no internal transactions for this address." %></span>
           </div>
         <% end %>
-        <div class="">
+        <div>
           <%= if @next_page_params do %>
             <%= link(
               gettext("Older"),
